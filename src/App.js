@@ -15,13 +15,157 @@ const heightPerItem = 2;
 const contentHeightItem = 30;
 
 const initialNodes = [
-  { id: "1", position: { x: 0, y: 50 }, data: { label: "1" } },
-  { id: "2", position: { x: 0, y: 150 }, data: { label: "2" } },
-  { id: "3", position: { x: 200, y: 150 }, data: { label: "3" } },
+  {
+    id: "1",
+    position: { x: 0, y: 110 },
+    data: {
+      label:
+        "いつまでもそんなことは言ってられない、ぐだぐだ言わずに手をつけました。",
+    },
+    style: {
+      width: 800,
+      fontSize: "15px",
+      fontWeight: 700,
+      border: "solid 4px #000",
+    },
+  },
+  {
+    id: "2",
+    position: { x: 0, y: 210 },
+    data: {
+      label:
+        "最初にしたのが「もしどら」の「マネジメントエッセンシャル版」でした",
+    },
+    style: {
+      width: 800,
+      fontSize: "15px",
+      fontWeight: 700,
+      border: "solid 4px #000",
+    },
+  },
+  {
+    id: "3",
+    position: { x: 200, y: 310 },
+    data: {
+      label: "これはつらい、、、",
+    },
+    style: {
+      width: 400,
+      fontSize: "12px",
+      fontWeight: 700,
+      border: "solid 4px #000",
+    },
+  },
+  {
+    id: "4",
+    position: { x: 0, y: 410 },
+    data: {
+      label: "俺は長男だから我慢できたけど次男だったら我慢できなかった",
+    },
+    style: {
+      width: 800,
+      fontSize: "20px",
+      fontWeight: 900,
+      border: "solid 4px #000",
+    },
+  },
+  {
+    id: "5",
+    position: { x: 0, y: 510 },
+    data: {
+      label: "少しやったら止まり、他の本のチャート化を優先したり、、",
+    },
+    style: {
+      width: 800,
+      fontSize: "15px",
+      fontWeight: 700,
+      border: "solid 4px #000",
+    },
+  },
+  {
+    id: "6",
+    position: { x: 0, y: 110 },
+    data: {
+      label:
+        "いつまでもそんなことは言ってられない、ぐだぐだ言わずに手をつけました。",
+    },
+    style: {
+      width: 800,
+      fontSize: "15px",
+      fontWeight: 700,
+      border: "solid 4px #000",
+    },
+  },
+  {
+    id: "6",
+    position: { x: 0, y: 610 },
+    data: {
+      label: "「完成」するのに「５年」かかりました。",
+    },
+    style: {
+      width: 800,
+      fontSize: "20px",
+      fontWeight: 900,
+      border: "solid 4px #000",
+    },
+  },
 ];
 const initialEdges = [
-  { id: "e1-2", source: "1", target: "2" },
-  { id: "e1-3", source: "1", target: "3" },
+  {
+    id: "e1-0",
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
+      color: "#000000",
+    },
+    source: "1",
+    target: "2",
+  },
+  {
+    id: "e1-1",
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
+      color: "#000000",
+    },
+    source: "2",
+    target: "3",
+  },
+  {
+    id: "e1-2",
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
+      color: "#000000",
+    },
+    source: "3",
+    target: "4",
+  },
+  {
+    id: "e1-3",
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
+      color: "#000000",
+    },
+    source: "4",
+    target: "5",
+  },
+  {
+    id: "e1-4",
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
+      color: "#000000",
+    },
+    source: "5",
+    target: "6",
+  },
 ];
 
 const createFileName = (extension = "", ...names) => {
@@ -33,7 +177,16 @@ const createFileName = (extension = "", ...names) => {
 };
 
 function App() {
-  const [text, setText] = useState("1\n2\n3\n1->2\n1->3");
+  const [text, setText] = useState(
+    "{「チャートで考えればうまくいく」セブンチャート仕事術＞の誕生物語}\n" +
+      "{（続）10.0ドラッガーとの出会い}\n" +
+      "いつまでもそんなことは言ってられない、ぐだぐだ言わずに手をつけました。\n" +
+      "最初にしたのが「もしどら」の「マネジメントエッセンシャル版」でした\n" +
+      "(small)これはつらい、、、\n" +
+      "(bold)俺は長男だから我慢できたけど次男だったら我慢できなかった\n" +
+      "少しやったら止まり、他の本のチャート化を優先したり、、\n" +
+      "(bold)「完成」するのに「５年」かかりました。"
+  );
   const [containerStyle, setContainerStyle] = useState({
     border: "none", // 他の境界線を無効化
     borderBottom: "solid 2px #000", // 下線のみ設定
@@ -41,7 +194,10 @@ function App() {
     height: "3%", // 初期値
     margin: 0,
   });
-  const [titleArray, setTitleArray] = useState([]);
+  const [titleArray, setTitleArray] = useState([
+    "「チャートで考えればうまくいく」セブンチャート仕事術＞の誕生物語",
+    "（続）10.0ドラッガーとの出会い",
+  ]);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const ref = createRef(null);
@@ -179,6 +335,8 @@ function App() {
         },
       });
     });
+    console.log(tempNodes);
+    console.log(tempEdges);
     setNodes(tempNodes);
     setEdges(tempEdges);
   };
