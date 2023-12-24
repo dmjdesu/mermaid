@@ -1,4 +1,4 @@
-import React, { useEffect, createRef, useState } from "react";
+import React, { useEffect, createRef, useRef, useState } from "react";
 import ReactFlow, {
   Panel,
   useNodesState,
@@ -201,7 +201,27 @@ function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const ref = createRef(null);
-  const [contentHeight, setContentHeight] = useState(50);
+  const textAreaRef = useRef(null);
+
+  const insertTextAtCursor = (insertText) => {
+    const textarea = textAreaRef.current;
+    console.log("textarea");
+    console.log(textarea);
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const newText = text.substring(0, start) + insertText + text.substring(end);
+    setText(newText);
+
+    // カーソルを挿入テキストの後ろに設定
+    setTimeout(() => {
+      textarea.selectionStart = textarea.selectionEnd =
+        start + insertText.length;
+    }, 0);
+  };
+
+  const handleinsertClick = (text) => {
+    insertTextAtCursor(text);
+  };
 
   const takeScreenShot = async (node) => {
     const dataURI = await htmlToImage.toJpeg(node, {
@@ -332,6 +352,9 @@ function App() {
           fontSize: fontSize,
           fontWeight: fontWeight,
           border: borderColor,
+          overflow: "hidden" /* 内容がコンテナを超えたら隠す */,
+          whiteSpace: "nowrap" /* テキストを改行させない */,
+          textOverflow: "ellipsis" /* はみ出したテキストを省略記号で表示 */,
         },
       });
     });
@@ -376,8 +399,12 @@ function App() {
           {" "}
           {/* 右側のセクション */}
           <button onClick={downloadScreenshot}>Download screenshot</button>
+          <button onClick={() => handleinsertClick("{}")}>タイトル</button>
+          <button onClick={() => handleinsertClick("(bold)")}>太く</button>
+          <button onClick={() => handleinsertClick("(small)")}>小さく</button>
           <br />
           <textarea
+            ref={textAreaRef}
             value={text}
             rows={100}
             cols={50}
