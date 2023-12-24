@@ -211,6 +211,7 @@ function App() {
     const end = textarea.selectionEnd;
     const newText = text.substring(0, start) + insertText + text.substring(end);
     setText(newText);
+    changeText(newText);
 
     // カーソルを挿入テキストの後ろに設定
     setTimeout(() => {
@@ -252,7 +253,6 @@ function App() {
     let lines = text.split("\n");
     let tempNodes = [];
     let tempEdges = [];
-    let edgesArray = [];
     let nodeesArray = [];
     let tempTitleArray = [];
 
