@@ -8,19 +8,134 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import * as htmlToImage from "html-to-image";
-import CustomEdge from "./CustomEdge";
+import VSEdge from "./VSEdge";
+import RightAngleEdge from "./RightAngleEdge";
+import TextUpdaterNode from "./TextUpdaterNode";
+import OmnidirectionalNode from "./OmnidirectionalNode";
+
+const nodeTypes = {
+  textUpdater: TextUpdaterNode,
+  omnidirectional: OmnidirectionalNode,
+};
 
 const contentBaseHeight = 50;
 const heightPerItem = 2;
 const contentHeightItem = 30;
 
+function createMultiNode(
+  index,
+  height,
+  width,
+  margin,
+  label,
+  contentWidth,
+  tempWidth,
+  fontSize,
+  fontWeight,
+  borderColor,
+  tempTitleArray
+) {
+  return {
+    multitype: "multi",
+    id: String(index + 1),
+    position: {
+      x: width * contentWidth + margin,
+      y:
+        height * 100 +
+        tempTitleArray.length * contentHeightItem +
+        contentBaseHeight,
+    },
+    data: { label: label },
+    style: {
+      width: tempWidth,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      border: borderColor,
+      overflow: "hidden",
+    },
+  };
+}
+
+function createOriginalNode(
+  index,
+  height,
+  width,
+  margin,
+  label,
+  contentWidth,
+  fontSize,
+  fontWeight,
+  borderColor,
+  tempTitleArray
+) {
+  return {
+    multitype: "single",
+    id: String(index + 1),
+    position: {
+      x: width * 200 + margin,
+      y:
+        height * 100 +
+        tempTitleArray.length * contentHeightItem +
+        contentBaseHeight,
+    },
+    data: { label: label },
+    style: {
+      width: contentWidth,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      border: borderColor,
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+    },
+  };
+}
+
+function createTitleNode(
+  index,
+  height,
+  width,
+  margin,
+  title,
+  body,
+  contentWidth,
+  fontSize,
+  fontWeight,
+  borderColor,
+  tempTitleArray
+) {
+  return {
+    multitype: "single",
+    id: String(index + 1),
+    position: {
+      x: width * 200 + margin,
+      y:
+        height * 100 +
+        tempTitleArray.length * contentHeightItem +
+        contentBaseHeight,
+    },
+    type: "textUpdater",
+    data: {
+      title: title,
+      body: body,
+    },
+    style: {
+      width: 800,
+      fontSize: "15px",
+      fontWeight: 700,
+      border: "solid 4px #000",
+    },
+  };
+}
+
 const initialNodes = [
   {
     id: "1",
     position: { x: 0, y: 110 },
+    type: "textUpdater",
     data: {
-      label:
-        "いつまでもそんなことは言ってられない、ぐだぐだ言わずに手をつけました。",
+      title: "覚醒",
+      body: "いつまでもそんなことは言ってられない、ぐだぐだ言わずに手をつけました。",
     },
     style: {
       width: 800,
@@ -119,6 +234,7 @@ const initialEdges = [
       height: 20,
       color: "#000000",
     },
+    type: "custom",
     source: "1",
     target: "2",
   },
@@ -180,7 +296,7 @@ function App() {
   const [text, setText] = useState(
     "{「チャートで考えればうまくいく」セブンチャート仕事術＞の誕生物語}\n" +
       "{（続）10.0ドラッガーとの出会い}\n" +
-      "いつまでもそんなことは言ってられない、ぐだぐだ言わずに手をつけました。\n" +
+      "(title:覚醒)いつまでもそんなことは言ってられない、ぐだぐだ言わずに手をつけました。\n" +
       "最初にしたのが「もしどら」の「マネジメントエッセンシャル版」でした\n" +
       "(small)これはつらい、、、\n" +
       "(bold)俺は長男だから我慢できたけど次男だったら我慢できなかった\n" +
@@ -246,8 +362,6 @@ function App() {
     setEdges(initialEdges);
   }, []);
 
-  const regex = /\{(.*?)\}/;
-
   const changeText = (v) => {
     let text = v;
     let lines = text.split("\n");
@@ -255,32 +369,42 @@ function App() {
     let tempEdges = [];
     let nodeesArray = [];
     let tempTitleArray = [];
+    let multiArray = [];
 
     setTitleArray([]);
     lines.forEach((line, index) => {
+      const regex = /\{(.*?)\}/;
       const match = line.match(regex);
       if (match) {
         const extractedText = match[1];
-        console.log("Extracted Text: ", extractedText);
         tempTitleArray.push(extractedText);
       } else {
-        let maxX = 0;
-        let maxY = 0;
-        initialNodes.forEach((node) => {
-          if (node.position.x > maxX) {
-            maxX = node.position.x;
+        const multiPattern = /\(multi\)/;
+        // 正規表現に一致するかテスト
+        if (multiPattern.test(line)) {
+          // 一致した場合の処理
+          console.log("一致しました！");
+          const newText = line.replace(multiPattern, "");
+          console.log(newText);
+          multiArray.push(newText);
+        } else {
+          if (multiArray.length > 0) {
+            nodeesArray.push({
+              type: "array",
+              id: String(index),
+              data: multiArray,
+            });
+            multiArray = [];
           }
-          if (node.position.y > maxY) {
-            maxY = node.position.y;
+          console.log("line");
+          console.log(line);
+          if (line) {
+            nodeesArray.push({
+              type: "word",
+              id: String(index + 1),
+              data: { label: line },
+            });
           }
-        });
-
-        if (line) {
-          nodeesArray.push({
-            id: String(index + 1),
-            data: { label: line },
-          });
-          console.log("setNodes");
         }
       }
     });
@@ -293,29 +417,17 @@ function App() {
       ...prevStyle,
       height: `${baseHeight + tempTitleArray.length * heightPerItem}%`, // 高さを動的に計算
     }));
-    console.log("titleArray.length");
-    console.log(titleArray.length);
+
+    let indexMargin = 0;
+    const smallPattern = /\(small\)/;
+    const boldPattern = /\(bold\)/;
+    const titlePattern = /\(title:([^)]*)\)/;
+    const vsPattern = /\(vs\)/;
 
     nodeesArray.forEach((node, index) => {
       let height = index;
 
       let width = 0;
-
-      console.log("tempTitleArray");
-      console.log(tempTitleArray);
-      if (nodeesArray.length >= index + 2) {
-        tempEdges.push({
-          id: "e1-" + index,
-          source: String(index + 1),
-          target: String(index + 2),
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            width: 20,
-            height: 20,
-            color: "#000000",
-          },
-        });
-      }
 
       let fontSize = "15px";
       let contentWidth = 800;
@@ -323,44 +435,232 @@ function App() {
       let fontWeight = 700;
       let borderColor = "solid 4px #000";
 
-      let pattern = /\(small\)/;
-      if (pattern.test(node.data.label)) {
-        node.data.label = node.data.label.replace(pattern, "");
-        fontSize = "12px";
-        contentWidth = 400;
-        margin = 200;
-      }
-      pattern = /\(bold\)/;
-      if (pattern.test(node.data.label)) {
-        node.data.label = node.data.label.replace(pattern, "");
-        fontWeight = 900;
-        fontSize = "20px";
-      }
+      if (node.type === "array") {
+        contentWidth = contentWidth / node.data.length;
+        let tempWidth = contentWidth - node.data.length * 10;
 
-      tempNodes.push({
-        id: String(index + 1),
-        position: {
-          x: width * 200 + margin,
-          y:
-            height * 100 +
-            tempTitleArray.length * contentHeightItem +
-            contentBaseHeight,
-        },
-        data: { label: node.data.label },
-        style: {
-          width: contentWidth,
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          border: borderColor,
-          overflow: "hidden" /* 内容がコンテナを超えたら隠す */,
-          whiteSpace: "nowrap" /* テキストを改行させない */,
-          textOverflow: "ellipsis" /* はみ出したテキストを省略記号で表示 */,
-        },
-      });
+        node.data.forEach((line, arrayindex) => {
+          console.log("arrayindex * width");
+          console.log(arrayindex * width);
+          tempNodes.push(
+            createMultiNode(
+              index + arrayindex,
+              height,
+              arrayindex,
+              margin,
+              line,
+              contentWidth,
+              tempWidth,
+              fontSize,
+              fontWeight,
+              borderColor,
+              tempTitleArray
+            )
+          );
+        });
+        console.log("node.data.length");
+        console.log(node.data.length);
+        indexMargin += node.data.length - 1;
+        console.log("indexMargin");
+        console.log(indexMargin);
+      } else if (node.type === "word") {
+        if (titlePattern.test(node.data.label)) {
+          const pattern = /title:([^)]*)\)/;
+          const match = node.data.label.match(pattern);
+          const extractedText = match[1]; // 抜き出される文字
+          const newText = node.data.label.replace(/\(title:[^)]*\)/, ""); // 全て除去
+          console.log("extractedText");
+          console.log(extractedText);
+          tempNodes.push(
+            createTitleNode(
+              index + indexMargin,
+              height,
+              width,
+              margin,
+              extractedText,
+              newText,
+              contentWidth,
+              fontSize,
+              fontWeight,
+              borderColor,
+              tempTitleArray
+            )
+          );
+        } else if (smallPattern.test(node.data.label)) {
+          node.data.label = node.data.label.replace(smallPattern, "");
+          fontSize = "12px";
+          contentWidth = 400;
+          margin = 200;
+
+          // (small) パターンに一致した場合のノードを作成
+          tempNodes.push(
+            createOriginalNode(
+              index + indexMargin,
+              height,
+              width,
+              margin,
+              node.data.label,
+              contentWidth,
+              fontSize,
+              fontWeight,
+              borderColor,
+              tempTitleArray
+            )
+          );
+        } else if (boldPattern.test(node.data.label)) {
+          node.data.label = node.data.label.replace(boldPattern, "");
+          fontWeight = 900;
+          fontSize = "20px";
+
+          // (bold) パターンに一致した場合のノードを作成
+          tempNodes.push(
+            createOriginalNode(
+              index + indexMargin,
+              height,
+              width,
+              margin,
+              node.data.label,
+              contentWidth,
+              fontSize,
+              fontWeight,
+              borderColor,
+              tempTitleArray
+            )
+          );
+        } else {
+          // どのパターンにも一致しない場合のノードを作成
+          tempNodes.push(
+            createOriginalNode(
+              index + indexMargin,
+              height,
+              width,
+              margin,
+              node.data.label,
+              contentWidth,
+              fontSize,
+              fontWeight,
+              borderColor,
+              tempTitleArray
+            )
+          );
+        }
+      }
     });
+    console.log("tempNodes");
     console.log(tempNodes);
-    console.log(tempEdges);
     setNodes(tempNodes);
+    tempNodes.forEach((node, index) => {
+      if (tempNodes.length !== index + 1) {
+        if (node.multitype === "single") {
+          tempEdges.push({
+            id: "e1-" + index,
+            source: String(index + 1),
+            target: String(index + 2),
+            type: "right",
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              width: 20,
+              height: 20,
+              color: "#000000",
+            },
+          });
+          let tempIndex = index;
+          while (true) {
+            if (tempNodes[tempIndex + 1]["multitype"] === "multi") {
+              tempEdges.push({
+                id: "e1-" + String(tempIndex) + String(index),
+                source: String(index + 1),
+                target: String(tempIndex + 2),
+                type: "right",
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                  width: 20,
+                  height: 20,
+                  color: "#000000",
+                },
+              });
+            } else {
+              break;
+            }
+            if (tempIndex + 2 >= tempNodes.length) {
+              break;
+            }
+            tempIndex += 1;
+          }
+        } else if (node.multitype === "multi") {
+          tempNodes[index]["type"] = "omnidirectional";
+          console.log("tempNodes[index]");
+          console.log(tempNodes[index]);
+          if (tempNodes[index + 1]["multitype"] === "multi") {
+            if (vsPattern.test(tempNodes[index]["data"]["label"])) {
+              tempNodes[index]["data"]["label"] = tempNodes[index]["data"][
+                "label"
+              ].replace(vsPattern, "");
+              tempEdges.push({
+                id: "e1-" + index,
+                source: String(index + 1),
+                target: String(index + 2),
+                sourceHandle: "udlr_right",
+                targetHandle: "udlr_left",
+                type: "custom",
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                  width: 20,
+                  height: 20,
+                  color: "#000000",
+                },
+              });
+            } else {
+              tempEdges.push({
+                id: "e1-" + index,
+                source: String(index + 1),
+                target: String(index + 2),
+                sourceHandle: "udlr_right",
+                targetHandle: "udlr_left",
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                  width: 20,
+                  height: 20,
+                  color: "#000000",
+                },
+              });
+            }
+          }
+          let tempIndex = index;
+          while (true) {
+            if (tempNodes[tempIndex + 1]["multitype"] === "single") {
+              tempEdges.push({
+                id: "e1-" + String(tempIndex) + String(index),
+                source: String(index + 1),
+                target: String(tempIndex + 2),
+                type: "right",
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                  width: 20,
+                  height: 20,
+                  color: "#000000",
+                },
+              });
+              break;
+            }
+            tempIndex += 1;
+          }
+          // tempEdges.push({
+          //   id: "e1-" + index,
+          //   source: String(index + 1),
+          //   target: String(index + 2),
+          //   markerEnd: {
+          //     type: MarkerType.ArrowClosed,
+          //     width: 20,
+          //     height: 20,
+          //     color: "#000000",
+          //   },
+          // });
+        }
+      }
+    });
+    console.log("tempEdges");
+    console.log(tempEdges);
     setEdges(tempEdges);
   };
 
@@ -380,7 +680,8 @@ function App() {
               onLoad={(reactFlowInstance) => reactFlowInstance.fitView()}
               onEdgesChange={onEdgesChange}
               onNodesChange={onNodesChange}
-              edgeTypes={{ custom: CustomEdge }}
+              edgeTypes={{ custom: VSEdge, right: RightAngleEdge }}
+              nodeTypes={nodeTypes}
               snapToGrid={true}
               key="edges"
             >
@@ -398,7 +699,8 @@ function App() {
         <div style={{ flex: 1 }}>
           {" "}
           {/* 右側のセクション */}
-          <button onClick={downloadScreenshot}>Download screenshot</button>
+          <button onClick={downloadScreenshot}>ダウンロード</button>
+          <button onClick={() => changeText(text)}>反映</button>
           <button onClick={() => handleinsertClick("{}")}>タイトル</button>
           <button onClick={() => handleinsertClick("(bold)")}>太く</button>
           <button onClick={() => handleinsertClick("(small)")}>小さく</button>
@@ -410,9 +712,6 @@ function App() {
             cols={50}
             onChange={(v) => {
               setText(v.target.value);
-            }}
-            onBlur={(v) => {
-              changeText(v.target.value);
             }}
           />
         </div>

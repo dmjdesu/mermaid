@@ -10369,7 +10369,7 @@ zustand@^3.7.2:
   resolved "https://registry.npmjs.org/zustand/-/zustand-3.7.2.tgz"
   integrity sha512-PIJDIZKtokhof+9+60cpockVOq05sJzHCriyvaLBmEJixseQ1a5Kdov6fWZfWOu5SK9c+FhH1jU0tntLxRJYMA==
 
-zustand@^4.4.1:
+zustand@^4.4.1, zustand@^4.4.7:
   version "4.4.7"
   resolved "https://registry.npmjs.org/zustand/-/zustand-4.4.7.tgz"
   integrity sha512-QFJWJMdlETcI69paJwhSMJz7PPWjVP8Sjhclxmxmxv/RYI7ZOvR5BHX+ktH0we9gTWQMxcne8q1OY8xxz604gw==
