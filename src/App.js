@@ -76,7 +76,6 @@ function createMultiNode(
         tempTitleArray.length * contentHeightItem +
         contentBaseHeight,
     },
-    type: "textUpdater",
     data: { label: label },
     style: {
       width: tempWidth,
@@ -471,6 +470,7 @@ function App() {
     const boldPattern = /\(bold\)/;
     const titlePattern = /\(title:([^)]*)\)/;
     const vsPattern = /\(vs\)/;
+    const linePattern = /\(line\)/;
     const nonPattern = /\(non\)/;
 
     nodeesArray.forEach((node, index) => {
@@ -490,8 +490,6 @@ function App() {
         let totalMaxLines = calculateMaxLines(node.data);
 
         node.data.forEach((line, arrayindex) => {
-          console.log("line");
-          console.log(line);
           tempNodes.push(
             createMultiNode(
               index + arrayindex + indexMargin,
@@ -667,13 +665,24 @@ function App() {
                 sourceHandle: "udlr_right",
                 targetHandle: "udlr_left",
                 type: "custom",
+                style: { strokeWidth: 0, stroke: "#000000" }, // ここで線の太さを設定
+              });
+              edgesIndex += 1;
+            }
+            if (linePattern.test(tempNodes[index]["data"]["label"])) {
+              tempNodes[index]["data"]["label"] = tempNodes[index]["data"][
+                "label"
+              ].replace(linePattern, "");
+              tempEdges.push({
+                id: "l1-" + edgesIndex,
+                source: String(index + 1),
+                target: String(index + 2),
+                sourceHandle: "udlr_right",
+                targetHandle: "udlr_left",
                 markerEnd: {
-                  type: MarkerType.ArrowClosed,
-                  width: 5,
-                  height: 5,
                   color: "#000000",
                 },
-                style: { strokeWidth: 0, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
             } else if (nonPattern.test(tempNodes[index]["data"]["label"])) {
@@ -776,6 +785,10 @@ function App() {
           <button onClick={() => handleinsertClick("{}")}>タイトル</button>
           <button onClick={() => handleinsertClick("(bold)")}>太く</button>
           <button onClick={() => handleinsertClick("(small)")}>小さく</button>
+          <button onClick={() => handleinsertClick("(multi)")}>複数</button>
+          <button onClick={() => handleinsertClick("(vs)")}>VS</button>
+          <button onClick={() => handleinsertClick("(line)")}>線</button>
+          <button onClick={() => handleinsertClick("(non)")}>線なし</button>
           <br />
           <textarea
             ref={textAreaRef}

@@ -14,7 +14,7 @@ function OmnidirectionalNode({ data, isConnectable }) {
     <>
       <div style={{ ...styles.customNode, overflow: "visible" }}>
         {data.title && <div style={styles.title}>{data.title}</div>}
-        <div style={styles.body}>{data.label}</div>
+        <div style={data.title && styles.body}>{data.label}</div>
         <Handle
           type="target"
           position="top"

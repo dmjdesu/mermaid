@@ -42,7 +42,7 @@ const VSEdge = ({
       <text>
         <textPath
           href={`#${id}`}
-          style={{ fontSize: 12 }}
+          style={{ fontSize: 16 }}
           startOffset="50%"
           textAnchor="middle"
         >
