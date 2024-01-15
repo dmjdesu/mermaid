@@ -39,9 +39,6 @@ function calculateMaxLines(array) {
     let columns = array[i];
     let linesForElement = Math.ceil(columns.length / maxChars);
 
-    console.log("linesForElement");
-    console.log(linesForElement);
-
     if (linesForElement > maxLines) {
       maxLines = linesForElement;
     }
@@ -438,9 +435,7 @@ function App() {
         // 正規表現に一致するかテスト
         if (multiPattern.test(line)) {
           // 一致した場合の処理
-          console.log("一致しました！");
           const newText = line.replace(multiPattern, "");
-          console.log(newText);
           multiArray.push(newText);
         } else {
           if (multiArray.length > 0) {
@@ -451,8 +446,6 @@ function App() {
             });
             multiArray = [];
           }
-          console.log("line");
-          console.log(line);
           if (line) {
             nodeesArray.push({
               type: "word",
@@ -497,9 +490,11 @@ function App() {
         let totalMaxLines = calculateMaxLines(node.data);
 
         node.data.forEach((line, arrayindex) => {
+          console.log("line");
+          console.log(line);
           tempNodes.push(
             createMultiNode(
-              index + arrayindex,
+              index + arrayindex + indexMargin,
               height,
               arrayindex,
               margin,
@@ -515,19 +510,13 @@ function App() {
           );
         });
         duplicateLineCount += totalMaxLines - 1;
-        console.log("node.data.length");
-        console.log(node.data.length);
         indexMargin += node.data.length - 1;
-        console.log("indexMargin");
-        console.log(indexMargin);
       } else if (node.type === "word") {
         if (titlePattern.test(node.data.label)) {
           const pattern = /title:([^)]*)\)/;
           const match = node.data.label.match(pattern);
           const extractedText = match[1]; // 抜き出される文字
           const newText = node.data.label.replace(/\(title:[^)]*\)/, ""); // 全て除去
-          console.log("extractedText");
-          console.log(extractedText);
           tempNodes.push(
             createTitleNode(
               index + indexMargin,
@@ -611,11 +600,13 @@ function App() {
     console.log(tempNodes);
     setNodes(tempNodes);
 
+    let edgesIndex = 1;
+
     tempNodes.forEach((node, index) => {
       if (tempNodes.length !== index + 1) {
         if (node.multitype === "single") {
           tempEdges.push({
-            id: "e1-" + index,
+            id: "l1-" + edgesIndex,
             source: String(index + 1),
             target: String(index + 2),
             type: "right",
@@ -627,11 +618,12 @@ function App() {
             },
             style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
           });
+          edgesIndex += 1;
           let tempIndex = index;
           while (true) {
             if (tempNodes[tempIndex + 1]["multitype"] === "multi") {
               tempEdges.push({
-                id: "e1-" + String(tempIndex) + String(index),
+                id: "l1-" + edgesIndex,
                 source: String(index + 1),
                 target: String(tempIndex + 2),
                 type: "right",
@@ -643,6 +635,7 @@ function App() {
                 },
                 style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
               });
+              edgesIndex += 1;
             } else {
               break;
             }
@@ -653,8 +646,6 @@ function App() {
           }
         } else if (node.multitype === "multi") {
           tempNodes[index]["type"] = "omnidirectional";
-          console.log("tempNodes[index]");
-          console.log(tempNodes[index]);
           if (titlePattern.test(tempNodes[index]["data"]["label"])) {
             const pattern = /title:([^)]*)\)/;
             const match = tempNodes[index]["data"]["label"].match(pattern);
@@ -670,7 +661,7 @@ function App() {
                 "label"
               ].replace(vsPattern, "");
               tempEdges.push({
-                id: "e1-" + index,
+                id: "l1-" + edgesIndex,
                 source: String(index + 1),
                 target: String(index + 2),
                 sourceHandle: "udlr_right",
@@ -682,15 +673,16 @@ function App() {
                   height: 5,
                   color: "#000000",
                 },
-                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 0, stroke: "#000000" }, // ここで線の太さを設定
               });
+              edgesIndex += 1;
             } else if (nonPattern.test(tempNodes[index]["data"]["label"])) {
               tempNodes[index]["data"]["label"] = tempNodes[index]["data"][
                 "label"
               ].replace(nonPattern, "");
             } else {
               tempEdges.push({
-                id: "e1-" + index,
+                id: "l1-" + edgesIndex,
                 source: String(index + 1),
                 target: String(index + 2),
                 sourceHandle: "udlr_right",
@@ -703,13 +695,14 @@ function App() {
                 },
                 style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
               });
+              edgesIndex += 1;
             }
           }
           let tempIndex = index;
           while (true) {
             if (tempNodes[tempIndex + 1]["multitype"] === "single") {
               tempEdges.push({
-                id: "e1-" + String(tempIndex) + String(index),
+                id: "l1-" + edgesIndex,
                 source: String(index + 1),
                 target: String(tempIndex + 2),
                 type: "right",
@@ -721,6 +714,7 @@ function App() {
                 },
                 style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
               });
+              edgesIndex += 1;
               break;
             }
             tempIndex += 1;
@@ -739,8 +733,6 @@ function App() {
         }
       }
     });
-    console.log("tempEdges");
-    console.log(tempEdges);
     setEdges(tempEdges);
   };
 

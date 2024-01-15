@@ -9,9 +9,7 @@ const VSEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
-  style = {},
-  data,
-  arrowHeadType,
+  style = { stroke: "transparent" }, // 線を透明にする
   markerEndId,
 }) => {
   // ベジェ曲線のパスを取得
