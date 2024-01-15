@@ -437,7 +437,7 @@ function App() {
           const newText = line.replace(multiPattern, "");
           multiArray.push(newText);
         } else {
-          if (multiArray.length > 0) {
+          if (multiArray.length > 0 && multiArray.length < 7) {
             nodeesArray.push({
               type: "array",
               id: String(index),
