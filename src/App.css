@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.react-flow__node.react-flow__node-omnidirectional.nopan.selectable {
+  overflow: visible !important;
+}

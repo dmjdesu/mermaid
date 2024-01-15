@@ -8,6 +8,9 @@ function TextUpdaterNode({ data, isConnectable }) {
     console.log(evt.target.value);
   }, []);
 
+  console.log(data.title);
+  console.log("data.title");
+
   return (
     <>
       <div style={styles.customNode}>
@@ -26,6 +29,7 @@ const styles = {
     padding: "10px",
     borderRadius: "3px",
     position: "relative", // タイトルを絶対位置で配置するため
+    overflow: "visible",
   },
   title: {
     position: "absolute", // 絶対位置

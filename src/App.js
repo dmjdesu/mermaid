@@ -12,11 +12,43 @@ import VSEdge from "./VSEdge";
 import RightAngleEdge from "./RightAngleEdge";
 import TextUpdaterNode from "./TextUpdaterNode";
 import OmnidirectionalNode from "./OmnidirectionalNode";
+import "./App.css";
 
 const nodeTypes = {
   textUpdater: TextUpdaterNode,
   omnidirectional: OmnidirectionalNode,
 };
+
+function calculateMaxLines(array) {
+  // 列ごとの最大文字数をマッピング
+  const maxCharsPerColumn = {
+    1: 50,
+    2: 23,
+    3: 13,
+    4: 8,
+    5: 5,
+    6: 2,
+  };
+
+  let maxLines = 0;
+
+  let maxChars = maxCharsPerColumn[array.length];
+
+  // 配列をループして、各要素の行数を計算し、最大値を更新する
+  for (let i = 0; i < array.length; i++) {
+    let columns = array[i];
+    let linesForElement = Math.ceil(columns.length / maxChars);
+
+    console.log("linesForElement");
+    console.log(linesForElement);
+
+    if (linesForElement > maxLines) {
+      maxLines = linesForElement;
+    }
+  }
+
+  return maxLines;
+}
 
 const contentBaseHeight = 50;
 const heightPerItem = 2;
@@ -33,7 +65,8 @@ function createMultiNode(
   fontSize,
   fontWeight,
   borderColor,
-  tempTitleArray
+  tempTitleArray,
+  duplicateLineCount
 ) {
   return {
     multitype: "multi",
@@ -42,9 +75,11 @@ function createMultiNode(
       x: width * contentWidth + margin,
       y:
         height * 100 +
+        duplicateLineCount * 30 +
         tempTitleArray.length * contentHeightItem +
         contentBaseHeight,
     },
+    type: "textUpdater",
     data: { label: label },
     style: {
       width: tempWidth,
@@ -66,7 +101,8 @@ function createOriginalNode(
   fontSize,
   fontWeight,
   borderColor,
-  tempTitleArray
+  tempTitleArray,
+  duplicateLineCount
 ) {
   return {
     multitype: "single",
@@ -75,6 +111,7 @@ function createOriginalNode(
       x: width * 200 + margin,
       y:
         height * 100 +
+        duplicateLineCount * 30 +
         tempTitleArray.length * contentHeightItem +
         contentBaseHeight,
     },
@@ -102,7 +139,8 @@ function createTitleNode(
   fontSize,
   fontWeight,
   borderColor,
-  tempTitleArray
+  tempTitleArray,
+  duplicateLineCount
 ) {
   return {
     multitype: "single",
@@ -111,6 +149,7 @@ function createTitleNode(
       x: width * 200 + margin,
       y:
         height * 100 +
+        duplicateLineCount * 30 +
         tempTitleArray.length * contentHeightItem +
         contentBaseHeight,
     },
@@ -230,57 +269,62 @@ const initialEdges = [
     id: "e1-0",
     markerEnd: {
       type: MarkerType.ArrowClosed,
-      width: 20,
-      height: 20,
+      width: 5,
+      height: 5,
       color: "#000000",
     },
     type: "custom",
     source: "1",
     target: "2",
+    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-1",
     markerEnd: {
       type: MarkerType.ArrowClosed,
-      width: 20,
-      height: 20,
+      width: 5,
+      height: 5,
       color: "#000000",
     },
     source: "2",
     target: "3",
+    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-2",
     markerEnd: {
       type: MarkerType.ArrowClosed,
-      width: 20,
-      height: 20,
+      width: 5,
+      height: 5,
       color: "#000000",
     },
     source: "3",
     target: "4",
+    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-3",
     markerEnd: {
       type: MarkerType.ArrowClosed,
-      width: 20,
-      height: 20,
+      width: 5,
+      height: 5,
       color: "#000000",
     },
     source: "4",
     target: "5",
+    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-4",
     markerEnd: {
       type: MarkerType.ArrowClosed,
-      width: 20,
-      height: 20,
+      width: 5,
+      height: 5,
       color: "#000000",
     },
     source: "5",
     target: "6",
+    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
   },
 ];
 
@@ -321,8 +365,6 @@ function App() {
 
   const insertTextAtCursor = (insertText) => {
     const textarea = textAreaRef.current;
-    console.log("textarea");
-    console.log(textarea);
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const newText = text.substring(0, start) + insertText + text.substring(end);
@@ -362,6 +404,18 @@ function App() {
     setEdges(initialEdges);
   }, []);
 
+  useEffect(() => {
+    // 要素を選択
+    const elements = document.querySelectorAll(
+      ".react-flow__node.react-flow__node-omnidirectional.nopan.selectable"
+    );
+
+    // 各要素のスタイルを変更
+    elements.forEach((element) => {
+      element.style.overflow = "visible";
+    });
+  }, []);
+
   const changeText = (v) => {
     let text = v;
     let lines = text.split("\n");
@@ -370,6 +424,7 @@ function App() {
     let nodeesArray = [];
     let tempTitleArray = [];
     let multiArray = [];
+    let duplicateLineCount = 0;
 
     setTitleArray([]);
     lines.forEach((line, index) => {
@@ -423,6 +478,7 @@ function App() {
     const boldPattern = /\(bold\)/;
     const titlePattern = /\(title:([^)]*)\)/;
     const vsPattern = /\(vs\)/;
+    const nonPattern = /\(non\)/;
 
     nodeesArray.forEach((node, index) => {
       let height = index;
@@ -438,10 +494,9 @@ function App() {
       if (node.type === "array") {
         contentWidth = contentWidth / node.data.length;
         let tempWidth = contentWidth - node.data.length * 10;
+        let totalMaxLines = calculateMaxLines(node.data);
 
         node.data.forEach((line, arrayindex) => {
-          console.log("arrayindex * width");
-          console.log(arrayindex * width);
           tempNodes.push(
             createMultiNode(
               index + arrayindex,
@@ -454,10 +509,12 @@ function App() {
               fontSize,
               fontWeight,
               borderColor,
-              tempTitleArray
+              tempTitleArray,
+              duplicateLineCount
             )
           );
         });
+        duplicateLineCount += totalMaxLines - 1;
         console.log("node.data.length");
         console.log(node.data.length);
         indexMargin += node.data.length - 1;
@@ -483,7 +540,8 @@ function App() {
               fontSize,
               fontWeight,
               borderColor,
-              tempTitleArray
+              tempTitleArray,
+              duplicateLineCount
             )
           );
         } else if (smallPattern.test(node.data.label)) {
@@ -504,7 +562,8 @@ function App() {
               fontSize,
               fontWeight,
               borderColor,
-              tempTitleArray
+              tempTitleArray,
+              duplicateLineCount
             )
           );
         } else if (boldPattern.test(node.data.label)) {
@@ -524,7 +583,8 @@ function App() {
               fontSize,
               fontWeight,
               borderColor,
-              tempTitleArray
+              tempTitleArray,
+              duplicateLineCount
             )
           );
         } else {
@@ -540,7 +600,8 @@ function App() {
               fontSize,
               fontWeight,
               borderColor,
-              tempTitleArray
+              tempTitleArray,
+              duplicateLineCount
             )
           );
         }
@@ -549,6 +610,7 @@ function App() {
     console.log("tempNodes");
     console.log(tempNodes);
     setNodes(tempNodes);
+
     tempNodes.forEach((node, index) => {
       if (tempNodes.length !== index + 1) {
         if (node.multitype === "single") {
@@ -559,10 +621,11 @@ function App() {
             type: "right",
             markerEnd: {
               type: MarkerType.ArrowClosed,
-              width: 20,
-              height: 20,
+              width: 5,
+              height: 5,
               color: "#000000",
             },
+            style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
           });
           let tempIndex = index;
           while (true) {
@@ -574,10 +637,11 @@ function App() {
                 type: "right",
                 markerEnd: {
                   type: MarkerType.ArrowClosed,
-                  width: 20,
-                  height: 20,
+                  width: 5,
+                  height: 5,
                   color: "#000000",
                 },
+                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
               });
             } else {
               break;
@@ -591,6 +655,15 @@ function App() {
           tempNodes[index]["type"] = "omnidirectional";
           console.log("tempNodes[index]");
           console.log(tempNodes[index]);
+          if (titlePattern.test(tempNodes[index]["data"]["label"])) {
+            const pattern = /title:([^)]*)\)/;
+            const match = tempNodes[index]["data"]["label"].match(pattern);
+            const extractedText = match[1]; // 抜き出される文字
+            tempNodes[index]["data"]["label"] = tempNodes[index]["data"][
+              "label"
+            ].replace(/\(title:[^)]*\)/, ""); // 全て除去
+            tempNodes[index]["data"]["title"] = extractedText;
+          }
           if (tempNodes[index + 1]["multitype"] === "multi") {
             if (vsPattern.test(tempNodes[index]["data"]["label"])) {
               tempNodes[index]["data"]["label"] = tempNodes[index]["data"][
@@ -605,11 +678,16 @@ function App() {
                 type: "custom",
                 markerEnd: {
                   type: MarkerType.ArrowClosed,
-                  width: 20,
-                  height: 20,
+                  width: 5,
+                  height: 5,
                   color: "#000000",
                 },
+                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
               });
+            } else if (nonPattern.test(tempNodes[index]["data"]["label"])) {
+              tempNodes[index]["data"]["label"] = tempNodes[index]["data"][
+                "label"
+              ].replace(nonPattern, "");
             } else {
               tempEdges.push({
                 id: "e1-" + index,
@@ -619,10 +697,11 @@ function App() {
                 targetHandle: "udlr_left",
                 markerEnd: {
                   type: MarkerType.ArrowClosed,
-                  width: 20,
-                  height: 20,
+                  width: 5,
+                  height: 5,
                   color: "#000000",
                 },
+                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
               });
             }
           }
@@ -636,10 +715,11 @@ function App() {
                 type: "right",
                 markerEnd: {
                   type: MarkerType.ArrowClosed,
-                  width: 20,
-                  height: 20,
+                  width: 5,
+                  height: 5,
                   color: "#000000",
                 },
+                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
               });
               break;
             }

@@ -12,7 +12,8 @@ function OmnidirectionalNode({ data, isConnectable }) {
 
   return (
     <>
-      <div style={styles.customNode}>
+      <div style={{ ...styles.customNode, overflow: "visible" }}>
+        {data.title && <div style={styles.title}>{data.title}</div>}
         <div style={styles.body}>{data.label}</div>
         <Handle
           type="target"
@@ -48,7 +49,21 @@ const styles = {
     border: "1px solid #222",
     padding: "10px",
     borderRadius: "3px",
-    position: "relative", // タイトルを絶対位置で配置するため
+    position: "relative", // これを追加
+  },
+  title: {
+    position: "absolute",
+    top: "-20px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    background: "#fff",
+    padding: "5px",
+    border: "1px solid #000",
+    borderRadius: "3px",
+    zIndex: 1000, // 既にあるのでそのまま
+  },
+  body: {
+    marginTop: "20px",
   },
 };
 
@@ -60,6 +75,7 @@ const customNodeStyle = {
     borderRadius: "5px",
     background: "white",
   },
+
   nodeTitle: {
     fontSize: "16px",
     fontWeight: "bold",
