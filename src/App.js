@@ -665,7 +665,6 @@ function App() {
                 sourceHandle: "udlr_right",
                 targetHandle: "udlr_left",
                 type: "custom",
-                style: { strokeWidth: 0, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
             }

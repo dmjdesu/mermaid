@@ -1,5 +1,10 @@
-import React from "react";
-import { getBezierPath, getEdgeCenter } from "react-flow-renderer";
+import React, { FC } from "react";
+import {
+  EdgeProps,
+  getBezierPath,
+  EdgeLabelRenderer,
+  BaseEdge,
+} from "reactflow";
 
 const VSEdge = ({
   id,
@@ -9,11 +14,9 @@ const VSEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
-  style = { stroke: "transparent" }, // 線を透明にする
-  markerEndId,
+  data,
 }) => {
-  // ベジェ曲線のパスを取得
-  const edgePath = getBezierPath({
+  const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -22,33 +25,25 @@ const VSEdge = ({
     targetPosition,
   });
 
-  // エッジの中央の位置を取得
-  const [centerX, centerY] = getEdgeCenter({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-  });
-
   return (
     <>
-      <path
-        id={id}
-        style={style}
-        className="react-flow__edge-path"
-        d={edgePath}
-        markerEnd={markerEndId}
-      />
-      <text>
-        <textPath
-          href={`#${id}`}
-          style={{ fontSize: 16 }}
-          startOffset="50%"
-          textAnchor="middle"
+      <BaseEdge id={id} path={edgePath} />
+      <EdgeLabelRenderer>
+        <div
+          style={{
+            position: "absolute",
+            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+            background: "#fff",
+            padding: 10,
+            borderRadius: 5,
+            fontSize: 12,
+            fontWeight: 700,
+          }}
+          className="nodrag nopan"
         >
           VS
-        </textPath>
-      </text>
+        </div>
+      </EdgeLabelRenderer>
     </>
   );
 };
