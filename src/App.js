@@ -664,6 +664,12 @@ function App() {
                 target: String(index + 2),
                 sourceHandle: "udlr_right",
                 targetHandle: "udlr_left",
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                  width: 5,
+                  height: 5,
+                  color: "#000000",
+                },
                 type: "custom",
               });
               edgesIndex += 1;

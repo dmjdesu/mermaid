@@ -27,7 +27,6 @@ const VSEdge = ({
 
   return (
     <>
-      <BaseEdge id={id} path={edgePath} />
       <EdgeLabelRenderer>
         <div
           style={{
@@ -36,10 +35,9 @@ const VSEdge = ({
             background: "#fff",
             padding: 10,
             borderRadius: 5,
-            fontSize: 12,
+            fontSize: 14,
             fontWeight: 700,
           }}
-          className="nodrag nopan"
         >
           VS
         </div>
