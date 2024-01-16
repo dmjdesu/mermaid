@@ -35,7 +35,7 @@ const VSEdge = ({
             background: "#fff",
             padding: 10,
             borderRadius: 5,
-            fontSize: 14,
+            fontSize: 20,
             fontWeight: 700,
           }}
         >

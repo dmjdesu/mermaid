@@ -51,6 +51,37 @@ const contentBaseHeight = 50;
 const heightPerItem = 2;
 const contentHeightItem = 30;
 
+function createBaseNode(
+  index,
+  height,
+  width,
+  margin,
+  label,
+  contentWidth,
+  fontSize,
+  fontWeight,
+  borderColor,
+  tempTitleArray,
+  duplicateLineCount
+) {
+  return {
+    id: String(index + 1),
+    position: {
+      x: width * 200 + margin,
+      y:
+        height * 100 +
+        duplicateLineCount * 30 +
+        tempTitleArray.length * contentHeightItem +
+        contentBaseHeight,
+    },
+    style: {
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      border: borderColor,
+      overflow: "hidden",
+    },
+  };
+}
 function createMultiNode(
   index,
   height,
@@ -65,24 +96,27 @@ function createMultiNode(
   tempTitleArray,
   duplicateLineCount
 ) {
+  const baseNode = createBaseNode(
+    index,
+    height,
+    width,
+    margin,
+    label,
+    contentWidth,
+    fontSize,
+    fontWeight,
+    borderColor,
+    tempTitleArray,
+    duplicateLineCount
+  );
+
   return {
+    ...baseNode,
     multitype: "multi",
-    id: String(index + 1),
-    position: {
-      x: width * contentWidth + margin,
-      y:
-        height * 100 +
-        duplicateLineCount * 30 +
-        tempTitleArray.length * contentHeightItem +
-        contentBaseHeight,
-    },
     data: { label: label },
     style: {
+      ...baseNode.style,
       width: tempWidth,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      border: borderColor,
-      overflow: "hidden",
     },
   };
 }
@@ -100,24 +134,27 @@ function createOriginalNode(
   tempTitleArray,
   duplicateLineCount
 ) {
+  const baseNode = createBaseNode(
+    index,
+    height,
+    width,
+    margin,
+    label,
+    contentWidth,
+    fontSize,
+    fontWeight,
+    borderColor,
+    tempTitleArray,
+    duplicateLineCount
+  );
+
   return {
+    ...baseNode,
     multitype: "single",
-    id: String(index + 1),
-    position: {
-      x: width * 200 + margin,
-      y:
-        height * 100 +
-        duplicateLineCount * 30 +
-        tempTitleArray.length * contentHeightItem +
-        contentBaseHeight,
-    },
     data: { label: label },
     style: {
+      ...baseNode.style,
       width: contentWidth,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      border: borderColor,
-      overflow: "hidden",
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
     },
@@ -138,23 +175,31 @@ function createTitleNode(
   tempTitleArray,
   duplicateLineCount
 ) {
+  const baseNode = createBaseNode(
+    index,
+    height,
+    width,
+    margin,
+    title,
+    body,
+    contentWidth,
+    fontSize,
+    fontWeight,
+    borderColor,
+    tempTitleArray,
+    duplicateLineCount
+  );
+
   return {
+    ...baseNode,
     multitype: "single",
-    id: String(index + 1),
-    position: {
-      x: width * 200 + margin,
-      y:
-        height * 100 +
-        duplicateLineCount * 30 +
-        tempTitleArray.length * contentHeightItem +
-        contentBaseHeight,
-    },
     type: "textUpdater",
     data: {
       title: title,
       body: body,
     },
     style: {
+      ...baseNode.style,
       width: 800,
       fontSize: "15px",
       fontWeight: 700,
