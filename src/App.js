@@ -349,7 +349,7 @@ function App() {
     border: "none", // 他の境界線を無効化
     borderBottom: "solid 2px #000", // 下線のみ設定
     width: "95%",
-    height: "3%", // 初期値
+    height: "4%", // 初期値
     margin: 0,
   });
   const [titleArray, setTitleArray] = useState([
