@@ -272,7 +272,6 @@ const initialEdges = [
       height: 5,
       color: "#000000",
     },
-    type: "custom",
     source: "1",
     target: "2",
     style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
@@ -823,10 +822,12 @@ function App() {
           {" "}
           {/* 右側のセクション */}
           <button onClick={downloadScreenshot}>ダウンロード</button>
+          <br />
           <button onClick={() => changeText(text)}>反映</button>
           <button onClick={() => handleinsertClick("{}")}>タイトル</button>
           <button onClick={() => handleinsertClick("(bold)")}>太く</button>
           <button onClick={() => handleinsertClick("(small)")}>小さく</button>
+          <br />
           <button onClick={() => handleinsertClick("(multi)")}>複数</button>
           <button onClick={() => handleinsertClick("(vs)")}>VS</button>
           <button onClick={() => handleinsertClick("(line)")}>線</button>
