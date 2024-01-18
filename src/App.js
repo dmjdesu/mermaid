@@ -19,6 +19,10 @@ const nodeTypes = {
   omnidirectional: OmnidirectionalNode,
 };
 
+function calculateMaxWords(word) {
+  return Math.ceil(word.length / 50);
+}
+
 function calculateMaxLines(array) {
   // 列ごとの最大文字数をマッピング
   const maxCharsPerColumn = {
@@ -503,10 +507,7 @@ function App() {
       if (node.type === "array") {
         contentWidth = contentWidth / node.data.length;
         let tempWidth = contentWidth - node.data.length * 10;
-        let totalMaxLines = calculateMaxLines(node.data);
-        console.log("node.data");
-        console.log(node.data);
-        console.log(totalMaxLines);
+        let totalMaxLines = calculateMaxLines(node.data.label);
 
         node.data.forEach((line, arrayindex) => {
           tempNodes.push(
@@ -526,7 +527,7 @@ function App() {
             )
           );
         });
-        if (node.data) duplicateLineCount += totalMaxLines - 1;
+        if (node.data.label) duplicateLineCount += totalMaxLines - 1;
         indexMargin += node.data.length - 1;
       } else if (node.type === "word") {
         if (titlePattern.test(node.data.label)) {
@@ -534,6 +535,7 @@ function App() {
           const match = node.data.label.match(pattern);
           const extractedText = match[1]; // 抜き出される文字
           const newText = node.data.label.replace(/\(title:[^)]*\)/, ""); // 全て除去
+          let totalMaxLines = calculateMaxWords(node.data.label);
           tempNodes.push(
             createTitleNode(
               index + indexMargin,
@@ -550,12 +552,17 @@ function App() {
               duplicateLineCount
             )
           );
+          if (node.data.label) duplicateLineCount += totalMaxLines - 1;
         } else if (smallPattern.test(node.data.label)) {
           node.data.label = node.data.label.replace(smallPattern, "");
           fontSize = "12px";
           contentWidth = 400;
           margin = 200;
 
+          let totalMaxLines = calculateMaxWords(node.data.label);
+          console.log("node.data");
+          console.log(node.data);
+          console.log(totalMaxLines);
           // (small) パターンに一致した場合のノードを作成
           tempNodes.push(
             createOriginalNode(
@@ -572,11 +579,12 @@ function App() {
               duplicateLineCount
             )
           );
+          if (node.data.label) duplicateLineCount += totalMaxLines - 1;
         } else if (boldPattern.test(node.data.label)) {
           node.data.label = node.data.label.replace(boldPattern, "");
           fontWeight = 900;
           fontSize = "20px";
-
+          let totalMaxLines = calculateMaxWords(node.data.label);
           // (bold) パターンに一致した場合のノードを作成
           tempNodes.push(
             createOriginalNode(
@@ -593,8 +601,10 @@ function App() {
               duplicateLineCount
             )
           );
+          if (node.data.label) duplicateLineCount += totalMaxLines - 1;
         } else {
           // どのパターンにも一致しない場合のノードを作成
+          let totalMaxLines = calculateMaxWords(node.data.label);
           tempNodes.push(
             createOriginalNode(
               index + indexMargin,
@@ -610,6 +620,7 @@ function App() {
               duplicateLineCount
             )
           );
+          if (node.data.label) duplicateLineCount += totalMaxLines - 1;
         }
       }
     });
