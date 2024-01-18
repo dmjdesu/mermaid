@@ -100,6 +100,8 @@ function createOriginalNode(
   tempTitleArray,
   duplicateLineCount
 ) {
+  console.log("duplicateLineCount");
+  console.log(duplicateLineCount);
   return {
     multitype: "single",
     id: String(index + 1),
@@ -117,9 +119,6 @@ function createOriginalNode(
       fontSize: fontSize,
       fontWeight: fontWeight,
       border: borderColor,
-      overflow: "hidden",
-      whiteSpace: "nowrap",
-      textOverflow: "ellipsis",
     },
   };
 }
@@ -424,6 +423,8 @@ function App() {
 
     setTitleArray([]);
     lines.forEach((line, index) => {
+      console.log("duplicateLineCount");
+      console.log(duplicateLineCount);
       const regex = /\{(.*?)\}/;
       const match = line.match(regex);
       if (match) {
@@ -447,7 +448,7 @@ function App() {
         } else {
           if (
             (multiArray.length > 0 && multiArray.length < 7) ||
-            lines.length === index + 1
+            (lines.length === index + 1 && multiArray.length > 0)
           ) {
             console.log("push");
             nodeesArray.push({
@@ -485,6 +486,9 @@ function App() {
     const linePattern = /\(line\)/;
     const nonPattern = /\(non\)/;
 
+    console.log("nodeesArray");
+    console.log(nodeesArray);
+
     nodeesArray.forEach((node, index) => {
       let height = index;
 
@@ -500,6 +504,9 @@ function App() {
         contentWidth = contentWidth / node.data.length;
         let tempWidth = contentWidth - node.data.length * 10;
         let totalMaxLines = calculateMaxLines(node.data);
+        console.log("node.data");
+        console.log(node.data);
+        console.log(totalMaxLines);
 
         node.data.forEach((line, arrayindex) => {
           tempNodes.push(
@@ -519,7 +526,7 @@ function App() {
             )
           );
         });
-        duplicateLineCount += totalMaxLines - 1;
+        if (node.data) duplicateLineCount += totalMaxLines - 1;
         indexMargin += node.data.length - 1;
       } else if (node.type === "word") {
         if (titlePattern.test(node.data.label)) {
@@ -766,10 +773,6 @@ function App() {
         }
       }
     });
-    console.log("tempNodes");
-    console.log(tempNodes);
-    console.log("tempEdges");
-    console.log(tempEdges);
     setEdges(tempEdges);
   };
 
