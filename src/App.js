@@ -87,6 +87,7 @@ function createMultiNode(
       fontWeight: fontWeight,
       border: borderColor,
       overflow: "hidden",
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   };
 }
@@ -123,6 +124,7 @@ function createOriginalNode(
       fontSize: fontSize,
       fontWeight: fontWeight,
       border: borderColor,
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   };
 }
@@ -162,6 +164,8 @@ function createTitleNode(
       fontSize: "15px",
       fontWeight: 700,
       border: "solid 4px #000",
+      textAlign: "center",
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   };
 }
@@ -180,6 +184,8 @@ const initialNodes = [
       fontSize: "15px",
       fontWeight: 700,
       border: "solid 4px #000",
+      textAlign: "center",
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   },
   {
@@ -194,6 +200,7 @@ const initialNodes = [
       fontSize: "15px",
       fontWeight: 700,
       border: "solid 4px #000",
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   },
   {
@@ -207,6 +214,7 @@ const initialNodes = [
       fontSize: "12px",
       fontWeight: 700,
       border: "solid 4px #000",
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   },
   {
@@ -220,6 +228,7 @@ const initialNodes = [
       fontSize: "20px",
       fontWeight: 900,
       border: "solid 4px #000",
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   },
   {
@@ -233,6 +242,7 @@ const initialNodes = [
       fontSize: "15px",
       fontWeight: 700,
       border: "solid 4px #000",
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   },
   {
@@ -247,6 +257,7 @@ const initialNodes = [
       fontSize: "15px",
       fontWeight: 700,
       border: "solid 4px #000",
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   },
   {
@@ -260,6 +271,7 @@ const initialNodes = [
       fontSize: "20px",
       fontWeight: 900,
       border: "solid 4px #000",
+      fontFamily: "HGP創英角ｺﾞｼｯｸUB",
     },
   },
 ];
@@ -274,7 +286,7 @@ const initialEdges = [
     },
     source: "1",
     target: "2",
-    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-1",
@@ -286,7 +298,7 @@ const initialEdges = [
     },
     source: "2",
     target: "3",
-    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-2",
@@ -298,7 +310,7 @@ const initialEdges = [
     },
     source: "3",
     target: "4",
-    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-3",
@@ -310,7 +322,7 @@ const initialEdges = [
     },
     source: "4",
     target: "5",
-    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-4",
@@ -322,7 +334,7 @@ const initialEdges = [
     },
     source: "5",
     target: "6",
-    style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
   },
 ];
 
@@ -643,7 +655,7 @@ function App() {
               height: 5,
               color: "#000000",
             },
-            style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+            style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
           });
           edgesIndex += 1;
           let tempIndex = index;
@@ -660,7 +672,7 @@ function App() {
                   height: 5,
                   color: "#000000",
                 },
-                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
             } else {
@@ -721,7 +733,7 @@ function App() {
                 markerEnd: {
                   color: "#000000",
                 },
-                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
             } else if (nonPattern.test(tempNodes[index]["data"]["label"])) {
@@ -741,7 +753,7 @@ function App() {
                   height: 5,
                   color: "#000000",
                 },
-                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
             }
@@ -762,7 +774,7 @@ function App() {
                   height: 5,
                   color: "#000000",
                 },
-                style: { strokeWidth: 5, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
               break;
@@ -818,28 +830,175 @@ function App() {
             </ReactFlow>
           </div>
         </div>
-        <div style={{ flex: 1 }}>
-          {" "}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "20px",
+          }}
+        >
           {/* 右側のセクション */}
-          <button onClick={downloadScreenshot}>ダウンロード</button>
-          <br />
-          <button onClick={() => changeText(text)}>反映</button>
-          <button onClick={() => handleinsertClick("{}")}>タイトル</button>
-          <button onClick={() => handleinsertClick("(bold)")}>太く</button>
-          <button onClick={() => handleinsertClick("(small)")}>小さく</button>
-          <br />
-          <button onClick={() => handleinsertClick("(multi)")}>複数</button>
-          <button onClick={() => handleinsertClick("(vs)")}>VS</button>
-          <button onClick={() => handleinsertClick("(line)")}>線</button>
-          <button onClick={() => handleinsertClick("(non)")}>線なし</button>
-          <br />
+          <div>
+            <button
+              style={{
+                backgroundColor: "#65BBE9" /* 緑色 */,
+                color: "white",
+                padding: "10px 15px",
+                margin: "5px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={downloadScreenshot}
+            >
+              ダウンロード
+            </button>
+          </div>
+          <div>
+            {/* <button
+              style={{
+                backgroundColor: "#f9f64f",
+                color: "black",
+                padding: "10px 15px",
+                margin: "5px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => changeText(text)}
+            >
+              反映
+            </button> */}
+          </div>
+          <div>
+            <button
+              style={{
+                backgroundColor: "#4CAF50",
+                color: "white",
+                padding: "10px 15px",
+                margin: "5px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => handleinsertClick("{}")}
+            >
+              タイトル
+            </button>
+            <button
+              style={{
+                backgroundColor: "#4CAF50",
+                color: "white",
+                padding: "10px 15px",
+                margin: "5px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => handleinsertClick("(bold)")}
+            >
+              太く
+            </button>
+            <button
+              style={{
+                backgroundColor: "#4CAF50",
+                color: "white",
+                padding: "10px 15px",
+                margin: "5px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => handleinsertClick("(small)")}
+            >
+              小さく
+            </button>
+          </div>
+          <div>
+            <button
+              style={{
+                backgroundColor: "#f79428",
+                color: "white",
+                padding: "10px 15px",
+                margin: "5px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => handleinsertClick("(multi)")}
+            >
+              複数
+            </button>
+            <button
+              style={{
+                backgroundColor: "#f79428",
+                color: "white",
+                padding: "10px 15px",
+                margin: "5px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => handleinsertClick("(vs)")}
+            >
+              VS
+            </button>
+            <button
+              style={{
+                backgroundColor: "#f79428",
+                color: "white",
+                padding: "10px 15px",
+                margin: "5px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => handleinsertClick("(line)")}
+            >
+              線
+            </button>
+            <button
+              style={{
+                backgroundColor: "#f79428",
+                color: "white",
+                padding: "10px 15px",
+                margin: "5px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+              onClick={() => handleinsertClick("(non)")}
+            >
+              線なし
+            </button>
+          </div>
           <textarea
             ref={textAreaRef}
             value={text}
             rows={100}
             cols={50}
+            style={{
+              width: "90%" /* サイズは必要に応じて調整 */,
+              height: "450px" /* サイズは必要に応じて調整 */,
+              padding: "12px 20px",
+              boxSizing: "border-box",
+              border: "2px solid #ccc",
+              borderRadius: "4px",
+              backgroundColor: "#f8f8f8",
+              resize: "none",
+            }}
             onChange={(v) => {
-              setText(v.target.value);
+              changeText(v.target.value);
             }}
           />
         </div>
