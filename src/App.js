@@ -286,7 +286,7 @@ const initialEdges = [
     },
     source: "1",
     target: "2",
-    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-1",
@@ -298,7 +298,7 @@ const initialEdges = [
     },
     source: "2",
     target: "3",
-    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-2",
@@ -310,7 +310,7 @@ const initialEdges = [
     },
     source: "3",
     target: "4",
-    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-3",
@@ -322,7 +322,7 @@ const initialEdges = [
     },
     source: "4",
     target: "5",
-    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
   },
   {
     id: "e1-4",
@@ -334,7 +334,7 @@ const initialEdges = [
     },
     source: "5",
     target: "6",
-    style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+    style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
   },
 ];
 
@@ -655,7 +655,7 @@ function App() {
               height: 5,
               color: "#000000",
             },
-            style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+            style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
           });
           edgesIndex += 1;
           let tempIndex = index;
@@ -672,7 +672,7 @@ function App() {
                   height: 5,
                   color: "#000000",
                 },
-                style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
             } else {
@@ -733,7 +733,7 @@ function App() {
                 markerEnd: {
                   color: "#000000",
                 },
-                style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
             } else if (nonPattern.test(tempNodes[index]["data"]["label"])) {
@@ -753,7 +753,7 @@ function App() {
                   height: 5,
                   color: "#000000",
                 },
-                style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
             }
@@ -774,7 +774,7 @@ function App() {
                   height: 5,
                   color: "#000000",
                 },
-                style: { strokeWidth: 3, stroke: "#000000" }, // ここで線の太さを設定
+                style: { strokeWidth: 2, stroke: "#000000" }, // ここで線の太さを設定
               });
               edgesIndex += 1;
               break;
