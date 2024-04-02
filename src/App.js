@@ -24,6 +24,7 @@ function calculateMaxWords(word) {
 }
 
 function calculateMaxLines(array) {
+  if(!array) return 0;
   // 列ごとの最大文字数をマッピング
   const maxCharsPerColumn = {
     1: 50,
