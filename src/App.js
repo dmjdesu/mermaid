@@ -635,8 +635,6 @@ function App() {
         }
       }
     });
-    console.log("tempNodes");
-    console.log(tempNodes);
     setNodes(tempNodes);
 
     let edgesIndex = 1;
@@ -796,6 +794,7 @@ function App() {
       }
     });
     setEdges(tempEdges);
+    setText(text);
   };
 
   return (
