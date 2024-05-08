@@ -4,17 +4,12 @@ import { Handle, Position } from "reactflow";
 const handleStyle = {};
 
 function OmnidirectionalNode({ data, isConnectable }) {
-  const onChange = useCallback((evt) => {
-    console.log(evt.target.value);
-  }, []);
-
-  console.log(data.body);
 
   return (
     <>
       <div style={{ ...styles.customNode, overflow: "visible" }}>
         {data.title && <div style={styles.title}>{data.title}</div>}
-        <div style={data.title && styles.body}>{data.label}</div>
+        <div style={styles.body}>{data.label}</div>
         <Handle
           type="target"
           position="top"
@@ -63,7 +58,7 @@ const styles = {
     zIndex: 1000, // 既にあるのでそのまま
   },
   body: {
-    marginTop: "20px",
+    marginTop: "20px"
   },
 };
 

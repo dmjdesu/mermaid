@@ -38,6 +38,7 @@ const styles = {
     transform: "translateX(-50%)", // 左右中央に配置
     background: "#fff", // 背景色
     padding: "5px", // パディング
+    fontSize: "10px", // フォントサイズ
     border: "1px solid #000", // 境界線
     borderRadius: "3px", // 境界線の角丸
   },
