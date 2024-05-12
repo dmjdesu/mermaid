@@ -443,7 +443,7 @@ function App() {
     const supMatch = regexSup.exec(line);
 
     if (introMatch) {
-      const size = "15px";
+      const size = "12px";
       let text = line ? line.replace(regexIntro, "").trim() : ''; // line が存在しない場合は空文字列を代入
       return { size, text };
     } else if (mainMatch) {
@@ -455,7 +455,7 @@ function App() {
       let text = line ? line.replace(regexSup, "").trim() : ''; // line が存在しない場合は空文字列を代入
       return { size, text };
     } else {
-      const size = "12px";
+      const size = "15px";
       let text = line ? line.trim() : ''; // line が存在しない場合は空文字列を代入
       return { size, text };
     }
